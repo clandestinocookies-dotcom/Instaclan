@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Vulpin — Content Manager</title>
+<title>InstaClan — Content Manager</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -69,6 +69,10 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .metric-label{font-size:11px;color:var(--text2);font-weight:500;letter-spacing:.5px;text-transform:uppercase;}
 .metric-sub{font-size:10px;color:var(--text3);margin-top:2px;}
 .dash-grid{display:grid;grid-template-columns:1fr 300px;gap:16px;}
+.ideias-cal-layout{display:grid;grid-template-columns:320px 1fr;gap:18px;align-items:start;}
+.ideias-cal-layout .notion-bank{max-height:calc(100vh - 190px);overflow-y:auto;position:sticky;top:0;}
+.ideias-cal-layout .ical-col{min-width:0;}
+@media(max-width:1000px){.ideias-cal-layout{grid-template-columns:1fr;}.ideias-cal-layout .notion-bank{max-height:400px;position:static;}}
 .card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:20px;box-shadow:0 4px 24px rgba(0,0,0,.5);}
 .card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
 .card-hd h3{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.5px;color:var(--text);}
@@ -207,8 +211,9 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .notion-row:last-child{border-bottom:none;}
 .notion-row:hover{background:var(--bg3);}
 .notion-row.done .notion-txt{text-decoration:line-through;color:var(--text3);}
-.notion-drag{width:24px;padding:12px 2px 10px 10px;color:var(--text3);font-size:11px;opacity:0;cursor:grab;flex-shrink:0;transition:opacity .12s;}
-.notion-row:hover .notion-drag{opacity:1;}
+.notion-drag{width:24px;padding:12px 2px 10px 10px;color:var(--text2);font-size:14px;opacity:.5;cursor:grab;flex-shrink:0;transition:opacity .12s,color .12s;}
+.notion-row:hover .notion-drag{opacity:1;color:var(--gold);}
+.notion-drag:active{cursor:grabbing;}
 .notion-check-col{padding:12px 6px 10px 2px;flex-shrink:0;}
 .notion-check{width:15px;height:15px;border-radius:3px;border:1.5px solid var(--border2);background:transparent;cursor:pointer;appearance:none;-webkit-appearance:none;position:relative;transition:all .15s;display:block;margin-top:1px;}
 .notion-check:checked{background:#16a34a;border-color:#16a34a;}
@@ -243,15 +248,16 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .ideas-hint{padding:8px 14px;border-top:1px solid var(--border);font-size:10px;color:var(--text3);text-align:center;background:var(--bg3);}
 .ical-head{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid var(--border);background:var(--bg3);flex-shrink:0;}
 .ical-hcell{padding:8px 4px;text-align:center;font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;}
-.ical-body{display:grid;grid-template-columns:repeat(7,1fr);align-content:start;}
-.ical-cell{height:110px;overflow:hidden;padding:5px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);transition:background .12s;}
-.ical-cell:nth-child(7n){border-right:none;}
-.ical-cell.empty-day{background:var(--bg);}
-.ical-cell:hover{background:var(--bg3);}
-.ical-cell.drop-over{background:rgba(201,168,76,.08);border-color:var(--gold);}
+.ical-body{display:grid;grid-template-columns:repeat(7,1fr);align-content:start;gap:6px;}
+.ical-cell{min-height:120px;overflow-y:auto;padding:6px;border-radius:10px;border:1px solid var(--border);background:var(--bg3);transition:background .12s,border-color .12s;}
+.ical-cell.empty-day{background:transparent;border:1px dashed var(--border);}
+.ical-cell:hover{border-color:var(--border2);}
+.ical-cell.drop-over{background:var(--goldbg2);border-color:var(--gold);box-shadow:0 0 0 2px rgba(232,25,44,.15) inset;}
+.ical-daynum{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--text2);margin-bottom:6px;display:inline-block;width:24px;height:24px;line-height:24px;text-align:center;}
 .ical-cell.today .ical-daynum{background:var(--gold);color:#fff;border-radius:50%;}
 .ical-daynum{font-size:11px;color:var(--text2);width:20px;height:20px;display:flex;align-items:center;justify-content:center;margin-bottom:3px;}
-.ical-ev{font-size:10px;padding:4px 6px;border-radius:6px;margin-bottom:3px;display:flex;flex-direction:column;gap:3px;cursor:grab;border:1px solid rgba(255,255,255,0.06);}
+.ical-ev{font-size:11px;padding:6px 8px;border-radius:8px;margin-bottom:5px;display:flex;flex-direction:column;gap:4px;cursor:grab;border:1px solid rgba(255,255,255,0.08);box-shadow:0 2px 6px rgba(0,0,0,.3);}
+.ical-ev:active{cursor:grabbing;}
 .ical-ev-top{display:flex;align-items:center;gap:3px;}
 .ical-ev-txt{overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;flex:1;font-weight:500;font-size:10px;line-height:1.3;word-break:break-word;white-space:normal;}
 .ical-ev-rm{background:none;border:none;cursor:pointer;font-size:10px;color:inherit;opacity:0;padding:0;line-height:1;flex-shrink:0;}
@@ -287,21 +293,76 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 }
 </style>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SB_URL='https://bjmpuxqxxcqukevecysd.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqbXB1eHF4eGNxdWtldmVjeXNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwNTIyNzUsImV4cCI6MjA5OTYyODI3NX0.gvKyjAVgggtt_X3bb2sjTXOAl-VL43vvdCeIBOB8J_w';
+const sb=supabase.createClient(SB_URL,SB_KEY);
+</script>
 </head>
 <body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen" style="position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;">
+  <div style="width:320px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:28px;">
+    <div style="text-align:center;margin-bottom:18px;">
+      <div class="v-icon" style="width:40px;height:40px;font-size:20px;border-radius:10px;margin:0 auto 8px;">V</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--text);">INSTACLAN</div>
+    </div>
+    <input class="s-input" id="li-email" placeholder="Email" style="width:100%;margin-bottom:8px;" type="email"/>
+    <input class="s-input" id="li-pass" placeholder="Senha" style="width:100%;margin-bottom:12px;" type="password"/>
+    <div id="li-err" style="color:#e8192c;font-size:12px;margin-bottom:10px;display:none;"></div>
+    <button class="btn-gold" style="width:100%;margin-bottom:8px;" onclick="doLogin()">Entrar</button>
+    <button class="btn-ghost" style="width:100%;" onclick="doSignup()">Criar conta</button>
+  </div>
+</div>
+
+<script>
+async function doLogin(){
+  const email=document.getElementById('li-email').value.trim();
+  const pass=document.getElementById('li-pass').value;
+  const err=document.getElementById('li-err');
+  err.style.display='none';
+  const {data,error}=await sb.auth.signInWithPassword({email,password:pass});
+  if(error){err.textContent=error.message;err.style.display='block';return;}
+  location.reload();
+}
+async function doSignup(){
+  const email=document.getElementById('li-email').value.trim();
+  const pass=document.getElementById('li-pass').value;
+  const err=document.getElementById('li-err');
+  err.style.display='none';
+  const {data,error}=await sb.auth.signUp({email,password:pass});
+  if(error){err.textContent=error.message;err.style.display='block';return;}
+  err.style.color='#4caf50';
+  err.textContent='Conta criada. Verifica teu email pra confirmar, depois entra.';
+  err.style.display='block';
+}
+async function checkAuth(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(session){
+    document.getElementById('login-screen').style.display='none';
+    window.currentUser=session.user;
+    if(typeof loadIdeiasFromSupabase==='function')await loadIdeiasFromSupabase();
+    if(typeof loadIcalFromSupabase==='function')await loadIcalFromSupabase();
+    if(window.onAuthReady) window.onAuthReady();
+  }
+}
+window.addEventListener('load',checkAuth);
+</script>
 
 <!-- MOBILE TOPBAR -->
 <header class="topbar-mobile">
   <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
-  <div class="logo-mobile"><div class="v-icon" style="width:28px;height:28px;font-size:14px;border-radius:7px">V</div>VULPIN</div>
+  <div class="logo-mobile"><div class="v-icon" style="width:28px;height:28px;font-size:14px;border-radius:7px">I</div>INSTACLAN</div>
 </header>
 <div class="overlay" id="overlay"></div>
 
 <aside class="sb" id="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-mark">
-      <div class="v-icon">V</div>
-      <span class="logo-name">VULPIN</span>
+      <div class="v-icon">I</div>
+      <span class="logo-name">INSTACLAN</span>
     </div>
     <div class="logo-tag">Content Manager</div>
   </div>
@@ -311,13 +372,14 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
     <button class="nav-item" data-pg="calendario"><span class="nav-icon">▦</span>Calendário</button>
     <div class="nav-section">Criação</div>
     <button class="nav-item" data-pg="ideias"><span class="nav-icon">◈</span>Banco de Ideias</button>
-    <button class="nav-item" data-pg="ia"><span class="nav-icon">◎</span>Vulpin AI<span class="ai-dot"></span></button>
+    <button class="nav-item" data-pg="ia"><span class="nav-icon">◎</span>InstaClan AI<span class="ai-dot"></span></button>
   </nav>
   <div class="sb-user">
     <div class="user-chip">
       <div class="user-av">C</div>
       <div><div class="user-name">Criador</div><div class="user-plan">PRO ✦</div></div>
     </div>
+    <button class="btn-ghost" style="width:100%;margin-top:8px;padding:6px;font-size:12px;" onclick="sb.auth.signOut().then(()=>location.reload())">Sair</button>
   </div>
 </aside>
 
@@ -368,48 +430,48 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 <!-- IDEIAS -->
 <section class="page" id="page-ideias">
 
-  <!-- BANCO DE IDEIAS -->
   <div class="ph">
-    <div><div class="ph-eyebrow">Banco</div><div class="ph-title">Ideias</div><div class="ph-sub">Arraste qualquer ideia para o calendário abaixo</div></div>
+    <div><div class="ph-eyebrow">Planejamento</div><div class="ph-title">Ideias &amp; Calendário</div><div class="ph-sub">Arraste uma ideia do banco para um dia do calendário</div></div>
     <button class="btn-gold" onclick="openModal('mi')">＋ Nova Ideia</button>
   </div>
 
-  <div class="notion-bank">
-    <div class="notion-bank-toolbar">
-      <input class="s-input" id="si-q" placeholder="Buscar ideias..." oninput="renderI()" style="flex:1;min-width:160px"/>
-      <div class="i-filter-bar" id="i-filter-bar">
-        <button class="i-chip active" data-f="">Todas</button>
-        <button class="i-chip" data-f="ideia">Ideia</button>
-        <button class="i-chip" data-f="gancho">Gancho</button>
-        <button class="i-chip" data-f="tendencia">Tendência</button>
-        <button class="i-chip" data-f="abertura">Abertura</button>
-        <button class="i-chip" data-f="cta">CTA</button>
+  <div class="ideias-cal-layout">
+
+    <!-- BANCO DE IDEIAS (lado) -->
+    <div class="notion-bank">
+      <div class="notion-bank-toolbar" style="flex-direction:column;align-items:stretch;gap:8px">
+        <input class="s-input" id="si-q" placeholder="Buscar ideias..." oninput="renderI()" style="width:100%"/>
+        <div class="i-filter-bar" id="i-filter-bar">
+          <button class="i-chip active" data-f="">Todas</button>
+          <button class="i-chip" data-f="ideia">Ideia</button>
+          <button class="i-chip" data-f="gancho">Gancho</button>
+          <button class="i-chip" data-f="tendencia">Tendência</button>
+          <button class="i-chip" data-f="abertura">Abertura</button>
+          <button class="i-chip" data-f="cta">CTA</button>
+        </div>
+      </div>
+      <div id="igrid" class="notion-list"></div>
+    </div>
+
+    <!-- CALENDÁRIO EDITORIAL -->
+    <div class="ical-col">
+      <div class="ph" style="margin-bottom:14px">
+        <div class="ph-eyebrow" style="margin-bottom:0">Calendário</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <button class="btn-ghost" style="padding:6px 12px" onclick="chMi(-1)">←</button>
+          <span id="ical-title" style="font-family:'Bebas Neue',sans-serif;font-size:18px;min-width:140px;text-align:center;color:var(--text)"></span>
+          <button class="btn-ghost" style="padding:6px 12px" onclick="chMi(1)">→</button>
+        </div>
+      </div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:0 4px 28px rgba(0,0,0,.5);">
+        <div class="ical-head">
+          <div class="ical-hcell">Dom</div><div class="ical-hcell">Seg</div><div class="ical-hcell">Ter</div>
+          <div class="ical-hcell">Qua</div><div class="ical-hcell">Qui</div><div class="ical-hcell">Sex</div><div class="ical-hcell">Sáb</div>
+        </div>
+        <div class="ical-body" id="ical-body"></div>
       </div>
     </div>
-    <div id="igrid" class="notion-list"></div>
-  </div>
 
-  <!-- DIVIDER -->
-  <div class="section-divider">
-    <span class="section-divider-label">Calendário Editorial</span>
-  </div>
-
-  <!-- CALENDÁRIO EDITORIAL -->
-  <div class="ph" style="margin-top:8px">
-    <div><div class="ph-eyebrow">Planejamento</div><div class="ph-title">Calendário</div><div class="ph-sub">Solte ideias nos dias para agendar</div></div>
-    <div style="display:flex;align-items:center;gap:8px">
-      <button class="btn-ghost" style="padding:6px 12px" onclick="chMi(-1)">←</button>
-      <span id="ical-title" style="font-family:'Bebas Neue',sans-serif;font-size:18px;min-width:140px;text-align:center;color:var(--text)"></span>
-      <button class="btn-ghost" style="padding:6px 12px" onclick="chMi(1)">→</button>
-    </div>
-  </div>
-
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:0 4px 28px rgba(0,0,0,.5);margin-bottom:32px;">
-    <div class="ical-head">
-      <div class="ical-hcell">Dom</div><div class="ical-hcell">Seg</div><div class="ical-hcell">Ter</div>
-      <div class="ical-hcell">Qua</div><div class="ical-hcell">Qui</div><div class="ical-hcell">Sex</div><div class="ical-hcell">Sáb</div>
-    </div>
-    <div class="ical-body" id="ical-body"></div>
   </div>
 
 </section>
@@ -417,7 +479,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 <!-- AI -->
 <section class="page" id="page-ia">
   <div class="ph">
-    <div><div class="ph-eyebrow">Inteligência</div><div class="ph-title">Vulpin AI</div><div class="ph-sub">Estrategista de conteúdo inteligente</div></div>
+    <div><div class="ph-eyebrow">Inteligência</div><div class="ph-title">InstaClan AI</div><div class="ph-sub">Estrategista de conteúdo inteligente</div></div>
     <div class="ai-header-badge"><span class="ai-dot" style="margin-left:0"></span>Online</div>
   </div>
   <div class="ai-tabs">
@@ -469,13 +531,32 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 <script>
 // ── SUPABASE ──────────────────────────────────────────
 // ── STATE ─────────────────────────────────────────────
-let currentUser = null;
 let conteudos=[];
 let ideias=JSON.parse(localStorage.getItem('vlp_i')||'[]');
 let calM=new Date().getMonth(),calY=new Date().getFullYear();
 
-function saveI(){localStorage.setItem('vlp_i',JSON.stringify(ideias));}
+function saveI(){
+  localStorage.setItem('vlp_i',JSON.stringify(ideias));
+  syncIdeiasToSupabase();
+}
 function saveC(){}
+
+async function loadIdeiasFromSupabase(){
+  const {data,error}=await sb.from('ideias').select('id,data').eq('user_id',window.currentUser.id);
+  if(error){console.error(error);return;}
+  ideias=data.map(r=>({...r.data,_sbid:r.id}));
+  localStorage.setItem('vlp_i',JSON.stringify(ideias));
+  if(typeof renderI==='function')renderI();
+}
+async function syncIdeiasToSupabase(){
+  if(!window.currentUser)return;
+  await sb.from('ideias').delete().eq('user_id',window.currentUser.id);
+  if(ideias.length===0)return;
+  const rows=ideias.map(i=>{const clean={...i};delete clean._sbid;return{user_id:window.currentUser.id,data:clean};});
+  const {data}=await sb.from('ideias').insert(rows).select('id');
+  if(data){for(let k=0;k<data.length;k++){if(ideias[k])ideias[k]._sbid=data[k].id;}}
+  localStorage.setItem('vlp_i',JSON.stringify(ideias));
+}
 
 
 
@@ -663,7 +744,22 @@ let dragIdeaId=null;
 let dragIcalEid=null;
 let dragIcalDs=null;
 let iActiveFilter='';
-function saveIcal(){localStorage.setItem('vlp_ical',JSON.stringify(icalEvents));}
+function saveIcal(){
+  localStorage.setItem('vlp_ical',JSON.stringify(icalEvents));
+  syncIcalToSupabase();
+}
+async function loadIcalFromSupabase(){
+  const {data,error}=await sb.from('ical_events').select('data').eq('user_id',window.currentUser.id).eq('day_key','_all').maybeSingle();
+  if(error){console.error(error);return;}
+  icalEvents=data?data.data:{};
+  localStorage.setItem('vlp_ical',JSON.stringify(icalEvents));
+  if(typeof renderIcal==='function')renderIcal();
+}
+async function syncIcalToSupabase(){
+  if(!window.currentUser)return;
+  await sb.from('ical_events').delete().eq('user_id',window.currentUser.id).eq('day_key','_all');
+  await sb.from('ical_events').insert({user_id:window.currentUser.id,day_key:'_all',data:icalEvents});
+}
 const months2=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 
 function isIdeaSched(id){return Object.values(icalEvents).some(a=>Array.isArray(a)&&a.some(e=>e.id===id));}
@@ -830,7 +926,7 @@ async function gerarIdeias(){
   const nicho=document.getElementById('ai-n-ideias').value.trim();if(!nicho){toast('Digite um nicho!','err');return;}
   const btn=document.getElementById('btn-ideias');btn.disabled=true;loading('r-ideias',`Gerando ideias para "${nicho}"...`);
   try{
-    const raw=await callAI(`Nicho: ${nicho}`,`Você é Vulpin AI, estrategista de conteúdo viral. Responda em português. Gere 8 ideias de Reels. APENAS JSON: {"ideias":[{"titulo":"...","gancho":"...","cta":"...","scores":{"viral":N,"gravacao":N,"seguidores":N,"vendas":N}}]}`);
+    const raw=await callAI(`Nicho: ${nicho}`,`Você é InstaClan AI, estrategista de conteúdo viral. Responda em português. Gere 8 ideias de Reels. APENAS JSON: {"ideias":[{"titulo":"...","gancho":"...","cta":"...","scores":{"viral":N,"gravacao":N,"seguidores":N,"vendas":N}}]}`);
     const p=JSON.parse(raw.replace(/\`\`\`json|\`\`\`/g,'').trim());const list=p.ideias||[];
     if(!list.length)throw new Error('Sem ideias.');
     document.getElementById('r-ideias').innerHTML=`<div class="ai-cards">${list.map((id,i)=>{const tot=Math.round((id.scores.viral+id.scores.gravacao+id.scores.seguidores+id.scores.vendas)/4);return `<div class="ai-card"><div class="ai-card-hd"><div class="ai-card-title">${i+1}. ${esc(id.titulo)}</div><span class="score-chip ${scCls(tot)}">⚡${tot}</span></div><div class="ai-card-body"><strong>🎯 Gancho:</strong> ${esc(id.gancho)}<br/><strong>📣 CTA:</strong> ${esc(id.cta)}<div style="margin-top:10px">${sbars(id.scores)}</div></div><button class="ai-save-btn" onclick="salvarI('${escA(id.titulo+' | '+id.gancho)}','gancho',['${escA(nicho)}'])">💾 Salvar no Banco</button></div>`;}).join('')}</div>`;
@@ -843,7 +939,7 @@ async function gerarCal30(){
   const nicho=document.getElementById('ai-n-cal').value.trim();if(!nicho){toast('Digite um nicho!','err');return;}
   const btn=document.getElementById('btn-cal');btn.disabled=true;loading('r-cal',`Criando calendário para "${nicho}"...`);
   try{
-    const raw=await callAI(`Nicho: ${nicho}`,`Você é Vulpin AI. Crie calendário 30 dias. Responda em português. APENAS JSON: {"dias":[{"dia":N,"tema":"...","objetivo":"...","tipo":"..."}]}`);
+    const raw=await callAI(`Nicho: ${nicho}`,`Você é InstaClan AI. Crie calendário 30 dias. Responda em português. APENAS JSON: {"dias":[{"dia":N,"tema":"...","objetivo":"...","tipo":"..."}]}`);
     const p=JSON.parse(raw.replace(/\`\`\`json|\`\`\`/g,'').trim());const dias=p.dias||[];
     document.getElementById('r-cal').innerHTML=`<div class="ai-cards"><div style="margin-bottom:12px;font-size:12px;color:var(--text2)">📅 30 dias para <strong style="color:var(--gold2)">${esc(nicho)}</strong></div><div class="cal30">${dias.map(d=>`<div class="cal30-item"><div class="cal30-day">Dia ${d.dia}</div><div class="cal30-tema">${esc(d.tema)}</div><div class="cal30-tipo">🎯 ${esc(d.objetivo)} · ${esc(d.tipo)}</div></div>`).join('')}</div></div>`;
     toast('Calendário 30 dias! 📅');
@@ -855,7 +951,7 @@ async function gerarRoteiros(){
   const tema=document.getElementById('ai-n-rot').value.trim();if(!tema){toast('Digite um tema!','err');return;}
   const btn=document.getElementById('btn-rot');btn.disabled=true;loading('r-rot',`Criando roteiros para "${tema}"...`);
   try{
-    const raw=await callAI(`Tema: ${tema}`,`Você é Vulpin AI, roteirista. Responda em português. Crie 3 roteiros: 15s, 30s, 60s. APENAS JSON: {"roteiros":[{"duracao":"15s","titulo":"...","roteiro":"..."}]}`);
+    const raw=await callAI(`Tema: ${tema}`,`Você é InstaClan AI, roteirista. Responda em português. Crie 3 roteiros: 15s, 30s, 60s. APENAS JSON: {"roteiros":[{"duracao":"15s","titulo":"...","roteiro":"..."}]}`);
     const p=JSON.parse(raw.replace(/\`\`\`json|\`\`\`/g,'').trim());const rots=p.roteiros||[];
     document.getElementById('r-rot').innerHTML=`<div class="ai-cards">${rots.map(r=>`<div class="roteiro-card"><div class="rot-dur">⏱ Roteiro ${r.duracao}</div><div class="rot-title">${esc(r.titulo)}</div><div class="rot-body">${esc(r.roteiro)}</div><button class="ai-save-btn" style="margin-top:10px" onclick="salvarI('ROTEIRO ${escA(r.duracao)}: ${escA((r.roteiro||'').slice(0,100))}...','ideia',['roteiro'])">💾 Salvar</button></div>`).join('')}</div>`;
     toast('Roteiros gerados! 🎬');
@@ -867,7 +963,7 @@ async function analisarPerfil(){
   const bio=document.getElementById('ai-bio').value.trim();if(!bio){toast('Cole sua bio!','err');return;}
   const btn=document.getElementById('btn-perf');btn.disabled=true;loading('r-perf','Analisando seu perfil...');
   try{
-    const raw=await callAI(`Bio: "${bio}"`,`Você é Vulpin AI. Analise a bio Instagram. Responda em português. APENAS JSON: {"nicho":"...","posicionamento":"...","bio_melhorada":"...","melhorias":["..."],"conteudos_faltando":["..."],"palavras_chave":["..."]}`);
+    const raw=await callAI(`Bio: "${bio}"`,`Você é InstaClan AI. Analise a bio Instagram. Responda em português. APENAS JSON: {"nicho":"...","posicionamento":"...","bio_melhorada":"...","melhorias":["..."],"conteudos_faltando":["..."],"palavras_chave":["..."]}`);
     const p=JSON.parse(raw.replace(/\`\`\`json|\`\`\`/g,'').trim());
     document.getElementById('r-perf').innerHTML=`<div class="perf-card"><div class="perf-sec"><div class="perf-sec-title">🏷 Nicho</div><div class="perf-item">${esc(p.nicho||'')}</div></div><div class="perf-sec"><div class="perf-sec-title">📌 Posicionamento</div><div class="perf-item">${esc(p.posicionamento||'')}</div></div><div class="perf-sec"><div class="perf-sec-title">✨ Bio Melhorada</div><div class="perf-item" style="color:var(--gold2);font-style:italic">${esc(p.bio_melhorada||'')}</div></div><div class="perf-sec"><div class="perf-sec-title">🔧 Melhorias</div>${(p.melhorias||[]).map(m=>`<div class="perf-item">• ${esc(m)}</div>`).join('')}</div><div class="perf-sec"><div class="perf-sec-title">📱 Conteúdos Faltando</div>${(p.conteudos_faltando||[]).map(c=>`<div class="perf-item">📍 ${esc(c)}</div>`).join('')}</div><div class="perf-sec"><div class="perf-sec-title">🔑 Palavras-chave</div><div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:4px">${(p.palavras_chave||[]).map(k=>`<span class="tag" style="color:var(--gold2)">#${esc(k)}</span>`).join('')}</div></div></div>`;
     toast('Análise concluída! 👤');
