@@ -207,6 +207,11 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .i-chip:hover{border-color:var(--gold);color:var(--gold);}
 .i-chip.active{background:var(--goldbg);color:var(--gold2);border-color:var(--gold);}
 .notion-list{overflow-y:auto;max-height:290px;display:flex;flex-direction:column;}
+.notion-quickadd-row{display:flex;align-items:center;gap:8px;padding:10px 10px 10px 34px;border-top:1px solid var(--border);}
+.notion-quickadd-icon{color:var(--text3);font-size:13px;flex-shrink:0;}
+.notion-quickadd-txt{flex:1;cursor:text;outline:none;font-size:13px;color:var(--text);min-height:18px;}
+.notion-quickadd-txt:empty:before{content:attr(data-placeholder);color:var(--text3);}
+.notion-quickadd-txt:focus{color:var(--text);}
 .notion-row{display:flex;align-items:flex-start;border-bottom:1px solid var(--border);transition:background .1s;user-select:none;}
 .notion-row:last-child{border-bottom:none;}
 .notion-row:hover{background:var(--bg3);}
@@ -454,6 +459,10 @@ window.addEventListener('load',checkAuth);
         </div>
       </div>
       <div id="igrid" class="notion-list"></div>
+      <div class="notion-quickadd-row">
+        <span class="notion-quickadd-icon">＋</span>
+        <div class="notion-quickadd-txt" id="quickadd-txt" contenteditable="true" data-placeholder="Escreva uma ideia e Enter..." onkeydown="if(event.key==='Enter'){event.preventDefault();quickAddIdea(this);}"></div>
+      </div>
     </div>
 
     <!-- CALENDÁRIO EDITORIAL -->
@@ -665,6 +674,20 @@ function delI(id){
   saveI();saveIcal();renderI();renderIcal();renderD();toast('Excluída.','err');
 }
 function editIdea(e,id){e.stopPropagation();const idea=ideias.find(i=>i.id===id);if(idea)openModal('mi',idea);}
+function quickAddIdea(el){
+  const txt=(el.innerText||'').trim();
+  if(!txt)return;
+  const newI={id:gid(),txt,tp:'ideia',st:'pensado',plat:'instagram',tags:[],criado:Date.now()};
+  ideias.unshift(newI);
+  saveI();
+  el.innerText='';
+  renderI();
+  toast('Ideia criada! 💡');
+  setTimeout(()=>{
+    const qa=document.getElementById('quickadd-txt');
+    if(qa)qa.focus();
+  },30);
+}
 function updateIdeaTxt(id,txt){
   const idea=ideias.find(i=>i.id===id);if(!idea)return;
   txt=(txt||'').trim();
