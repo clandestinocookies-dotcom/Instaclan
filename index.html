@@ -211,6 +211,9 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .notion-row:last-child{border-bottom:none;}
 .notion-row:hover{background:var(--bg3);}
 .notion-row.done .notion-txt{text-decoration:line-through;color:var(--text3);}
+.notion-row.sched .notion-txt{text-decoration:line-through;color:var(--text3);opacity:.75;}
+.notion-txt[contenteditable="true"]{cursor:text;outline:none;border-radius:4px;padding:2px 4px;margin:-2px -4px;}
+.notion-txt[contenteditable="true"]:focus{background:var(--bg3);box-shadow:0 0 0 1px var(--gold);}
 .notion-drag{width:24px;padding:12px 2px 10px 10px;color:var(--text2);font-size:14px;opacity:.5;cursor:grab;flex-shrink:0;transition:opacity .12s,color .12s;}
 .notion-row:hover .notion-drag{opacity:1;color:var(--gold);}
 .notion-drag:active{cursor:grabbing;}
@@ -662,6 +665,20 @@ function delI(id){
   saveI();saveIcal();renderI();renderIcal();renderD();toast('Excluída.','err');
 }
 function editIdea(e,id){e.stopPropagation();const idea=ideias.find(i=>i.id===id);if(idea)openModal('mi',idea);}
+function updateIdeaTxt(id,txt){
+  const idea=ideias.find(i=>i.id===id);if(!idea)return;
+  txt=(txt||'').trim();
+  if(!txt){delI(id);return;}
+  if(idea.txt===txt)return;
+  idea.txt=txt;
+  saveI();
+  // also update any scheduled copies in calendar
+  let changed=false;
+  Object.values(icalEvents).forEach(arr=>{
+    if(Array.isArray(arr))arr.forEach(ev=>{if(ev.id===id){ev.txt=txt;changed=true;}});
+  });
+  if(changed)saveIcal();
+}
 const stColors={pensado:'#555',gravado:'#888',editado:'var(--gold)',postado:'#3ecf8e'};
 const stLbl2={pensado:'Pensado',gravado:'Gravado',editado:'Editado',postado:'Postado'};
 const plLbl={instagram:'Instagram',tiktok:'TikTok',youtube:'YT Shorts',facebook:'Facebook'};
@@ -780,13 +797,13 @@ function renderI(){
     if(i.hora)meta.push(`<span class="notion-badge">${i.hora}</span>`);
     if(sched)meta.push(`<span class="notion-badge" style="color:#3ecf8e;border-color:#3ecf8e">Agendada</span>`);
     (i.tags||[]).forEach(t=>meta.push(`<span class="notion-badge">#${esc(t)}</span>`));
-    return `<div class="notion-row${done?' done':''}" draggable="true" data-id="${i.id}">
+    return `<div class="notion-row${done?' done':''}${sched&&!done?' sched':''}" draggable="true" data-id="${i.id}">
       <div class="notion-drag" title="Arrastar">⣿</div>
       <div class="notion-check-col">
         <input type="checkbox" class="notion-check" ${done?'checked':''} onchange="setIdeaSt(event,'${i.id}',this.checked?'postado':'pensado')"/>
       </div>
       <div class="notion-body" onclick="editIdea(event,'${i.id}')">
-        <div class="notion-txt">${esc(i.txt)}</div>
+        <div class="notion-txt" contenteditable="true" onclick="event.stopPropagation()" onblur="updateIdeaTxt('${i.id}',this.innerText)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur();}">${esc(i.txt)}</div>
         ${meta.length?`<div class="notion-sub">${meta.join('')}</div>`:''}
         <div class="notion-st-row">
           ${['pensado','gravado','editado','postado'].map(s=>`<button class="notion-st-btn${st===s?' active '+s:''}" onclick="setIdeaSt(event,'${i.id}','${s}')">${stLbl2[s]}</button>`).join('')}
