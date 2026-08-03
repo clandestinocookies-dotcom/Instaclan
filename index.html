@@ -307,6 +307,17 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .ical-ev-st.gravado{background:var(--st-gravado-bg);color:var(--st-gravado);}
 .ical-ev-st.editado{background:var(--st-editado-bg);color:var(--st-editado);}
 .ical-ev-st.postado{background:var(--st-postado-bg);color:var(--st-postado);}
+.ical-cell[data-date]{cursor:pointer;}
+.day-modal-list{display:flex;flex-direction:column;gap:10px;max-height:60vh;overflow-y:auto;}
+.day-item{background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--st-pensado);border-radius:var(--rsm);padding:12px 14px;}
+.day-item.st-pensado{border-left-color:var(--st-pensado);}
+.day-item.st-gravado{border-left-color:var(--st-gravado);}
+.day-item.st-editado{border-left-color:var(--st-editado);background:var(--st-editado-bg);}
+.day-item.st-postado{border-left-color:var(--st-postado);}
+.day-item-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+.day-item-txt{font-size:13px;color:var(--text);font-weight:500;cursor:pointer;line-height:1.5;}
+.day-item-txt:hover{color:var(--gold);}
+.day-item-sub{font-size:12px;color:var(--text2);margin-top:6px;line-height:1.6;}
 /* MOBILE TOPBAR */
 .topbar-mobile{display:none;position:fixed;top:0;left:0;right:0;height:54px;background:var(--bg2);border-bottom:1px solid var(--border);align-items:center;padding:0 16px;gap:12px;z-index:200;}
 .logo-mobile{display:flex;align-items:center;gap:8px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;}
@@ -571,6 +582,17 @@ window.addEventListener('load',checkAuth);
       </div>
     </div>
     <div class="modal-ft"><button class="btn-ghost" onclick="closeModal('mi')">Cancelar</button><button class="btn-gold" onclick="salvarI()">Salvar</button></div>
+  </div>
+</div>
+
+<!-- MODAL DIA (ver tudo do dia) -->
+<div class="modal-ov" id="md">
+  <div class="modal">
+    <div class="modal-hd"><h2 id="md-title">DIA</h2><button class="modal-x" onclick="closeModal('md')">✕</button></div>
+    <div class="modal-body">
+      <div id="md-list" class="day-modal-list"></div>
+    </div>
+    <div class="modal-ft"><button class="btn-ghost" onclick="closeModal('md')">Fechar</button></div>
   </div>
 </div>
 
@@ -931,6 +953,10 @@ function renderIcal(){
 
   // bind drop on cells
   document.querySelectorAll('.ical-cell[data-date]').forEach(cell=>{
+    cell.addEventListener('click',e=>{
+      if(e.target.closest('.ical-ev'))return;
+      openDayModal(cell.dataset.date);
+    });
     cell.addEventListener('dragover',e=>{e.preventDefault();cell.classList.add('drop-over');});
     cell.addEventListener('dragleave',()=>cell.classList.remove('drop-over'));
     cell.addEventListener('drop',e=>{
@@ -969,7 +995,41 @@ function removeIcalEv(ds,eid){
   if(!icalEvents[ds])return;
   icalEvents[ds]=icalEvents[ds].filter(e=>e.eid!==eid);
   if(!icalEvents[ds].length)delete icalEvents[ds];
-  saveIcal();renderIcal();renderI();
+  saveIcal();renderIcal();renderI();refreshDay();
+  toast('Excluída.','err');
+}
+
+function openDayModal(ds){
+  window._curDayDs=ds;
+  const[y,m,d]=ds.split('-');
+  const months3=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+  document.getElementById('md-title').textContent=`${parseInt(d,10)} de ${months3[parseInt(m,10)-1]}`;
+  const evs=icalEvents[ds]||[];
+  const platIco={instagram:'📸',tiktok:'🎵',youtube:'▶️',facebook:'👤'};
+  const el=document.getElementById('md-list');
+  if(!evs.length){
+    el.innerHTML='<div class="empty-notion">Nenhum conteúdo agendado nesse dia. Arraste uma ideia do banco pra cá.</div>';
+  }else{
+    el.innerHTML=evs.map(e=>{
+      const idea=ideias.find(i=>i.id===e.id)||{};
+      const st=idea.st||'pensado';
+      return `<div class="day-item st-${st}">
+        <div class="day-item-top">
+          <span class="plat-badge ${idea.plat||'instagram'}">${platIco[idea.plat]||''} ${plLbl[idea.plat]||''}</span>
+          <button class="ical-ev-st ${st}" onclick="cycleIcalSt(event,'${e.id}');refreshDay()">${stLbl2[st]}</button>
+          ${idea.hora?`<span class="notion-badge">⏰ ${idea.hora}</span>`:''}
+          <button class="notion-act del" style="margin-left:auto" onclick="removeIcalEv('${ds}','${e.eid}');event.stopPropagation()" title="Remover">✕</button>
+        </div>
+        <div class="day-item-txt" onclick="editIdea(event,'${e.id}')">${esc(idea.gancho||e.txt)}</div>
+        ${idea.desenv?`<div class="day-item-sub"><strong>🎬 Desenvolvimento:</strong> ${esc(idea.desenv)}</div>`:''}
+        ${idea.cta?`<div class="day-item-sub"><strong>📣 CTA:</strong> ${esc(idea.cta)}</div>`:''}
+      </div>`;
+    }).join('');
+  }
+  openModal('md');
+}
+function refreshDay(){
+  if(window._curDayDs && document.getElementById('md').classList.contains('active'))openDayModal(window._curDayDs);
 }
 
 function chMi(d){icalM+=d;if(icalM>11){icalM=0;icalY++;}if(icalM<0){icalM=11;icalY--;}renderIcal();}
