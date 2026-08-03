@@ -16,6 +16,10 @@
   --blue:#ffffff;--bluebg:rgba(255,255,255,0.08);
   --orange:#e8192c;--orangebg:rgba(232,25,44,0.1);
   --red:#e8192c;--redbg:rgba(232,25,44,0.1);
+  --st-pensado:#8a8f98;--st-pensado-bg:rgba(138,143,152,0.14);
+  --st-gravado:#5b9cf6;--st-gravado-bg:rgba(91,156,246,0.14);
+  --st-editado:#e8192c;--st-editado-bg:rgba(232,25,44,0.14);
+  --st-postado:#34d399;--st-postado-bg:rgba(52,211,153,0.14);
   --r:16px;--rsm:12px;--rlg:24px;
 }
 *{font-family:'Poppins',sans-serif;}
@@ -70,10 +74,24 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .metric-label{font-size:11px;color:var(--text2);font-weight:500;letter-spacing:.5px;text-transform:uppercase;}
 .metric-sub{font-size:10px;color:var(--text3);margin-top:2px;}
 .dash-grid{display:grid;grid-template-columns:1fr 300px;gap:16px;}
-.ideias-cal-layout{display:grid;grid-template-columns:320px 1fr;gap:18px;align-items:start;}
-.ideias-cal-layout .ical-col:first-child .notion-bank{max-height:calc(100vh - 250px);overflow-y:auto;}
+.ideias-cal-layout{display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:start;}
 .ideias-cal-layout .ical-col{min-width:0;}
-@media(max-width:1000px){.ideias-cal-layout{grid-template-columns:1fr;}.ideias-cal-layout .ical-col:first-child .notion-bank{max-height:400px;}}
+@media(max-width:1000px){.ideias-cal-layout{grid-template-columns:1fr;}}
+
+/* ── Panel shell (shared by bank + calendar) ───────────────────── */
+.panel-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rlg);overflow:hidden;box-shadow:0 4px 28px rgba(0,0,0,.45);display:flex;flex-direction:column;}
+.reel-rail{height:14px;flex-shrink:0;background:var(--bg);background-image:radial-gradient(circle,var(--bg2) 3px,transparent 3.5px);background-size:16px 14px;background-position:8px center;border-bottom:1px solid var(--border);}
+.panel-hd{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 12px;gap:10px;flex-wrap:wrap;}
+.panel-hd-title{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:.5px;color:var(--text);display:flex;align-items:center;gap:8px;}
+.panel-hd-icon{color:var(--gold);font-size:16px;}
+.panel-count{font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--text2);background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:2px 11px;}
+.cal-nav-mini{display:flex;align-items:center;gap:10px;}
+.cal-nav-btn{width:26px;height:26px;border-radius:8px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;transition:all .15s;}
+.cal-nav-btn:hover{border-color:var(--gold);color:var(--gold);}
+.cal-nav-label{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.5px;min-width:130px;text-align:center;color:var(--text);display:inline-block;}
+.ical-legend{display:flex;gap:14px;flex-wrap:wrap;padding:0 18px 14px;font-size:10px;color:var(--text2);letter-spacing:.3px;text-transform:uppercase;}
+.ical-legend span{display:flex;align-items:center;gap:5px;}
+.ical-legend .dot{width:7px;height:7px;border-radius:50%;display:inline-block;}
 .card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:20px;box-shadow:0 4px 24px rgba(0,0,0,.5);}
 .card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
 .card-hd h3{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.5px;color:var(--text);}
@@ -201,44 +219,46 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .fg select option{background:var(--bg2);}.fg textarea{resize:vertical;}
 .toast{position:fixed;bottom:24px;right:24px;background:var(--bg2);border:1px solid var(--border);box-shadow:0 8px 32px rgba(0,0,0,.6);border-radius:var(--rsm);padding:11px 16px;font-size:12px;z-index:1000;transform:translateY(12px);opacity:0;transition:all .2s;pointer-events:none;max-width:280px;}
 .toast.show{transform:translateY(0);opacity:1;}.toast.ok{border-color:var(--green);color:var(--green);}.toast.err{border-color:var(--red);color:var(--red);}
-.notion-bank{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:0 4px 28px rgba(0,0,0,.4);margin-bottom:24px;display:flex;flex-direction:column;}
-.notion-bank-toolbar{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border);flex-wrap:wrap;background:var(--bg3);}
-.i-filter-bar{display:flex;gap:4px;flex-wrap:wrap;}
-.i-chip{font-size:10px;padding:3px 8px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;font-family:'Poppins',sans-serif;transition:all .15s;}
+.notion-bank-toolbar{display:flex;flex-direction:column;gap:9px;padding:0 18px 14px;}
+.i-filter-bar{display:flex;gap:5px;flex-wrap:wrap;}
+.i-chip{font-size:10.5px;padding:4px 10px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;font-family:'Poppins',sans-serif;transition:all .15s;}
 .i-chip:hover{border-color:var(--gold);color:var(--gold);}
 .i-chip.active{background:var(--goldbg);color:var(--gold2);border-color:var(--gold);}
-.notion-list{overflow-y:auto;max-height:290px;display:flex;flex-direction:column;}
-.notion-quickadd-row{display:flex;align-items:center;gap:8px;padding:10px 10px 10px 34px;border-top:1px solid var(--border);}
-.notion-quickadd-icon{color:var(--text3);font-size:13px;flex-shrink:0;}
+.notion-list{overflow-y:auto;max-height:calc(100vh - 430px);min-height:220px;display:flex;flex-direction:column;gap:8px;padding:0 12px;}
+.notion-quickadd-row{display:flex;align-items:center;gap:8px;padding:12px 18px;border-top:1px solid var(--border);background:var(--bg3);}
+.notion-quickadd-icon{color:var(--gold);font-size:14px;flex-shrink:0;}
 .notion-quickadd-txt{flex:1;cursor:text;outline:none;font-size:13px;color:var(--text);min-height:18px;}
 .notion-quickadd-txt:empty:before{content:attr(data-placeholder);color:var(--text3);}
 .notion-quickadd-txt:focus{color:var(--text);}
-.notion-row{display:flex;align-items:flex-start;border-bottom:1px solid var(--border);transition:background .1s;user-select:none;}
-.notion-row:last-child{border-bottom:none;}
-.notion-row:hover{background:var(--bg3);}
+.notion-row{display:flex;align-items:flex-start;background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--st-pensado);border-radius:var(--rsm);transition:border-color .12s,transform .12s;user-select:none;}
+.notion-row.st-pensado{border-left-color:var(--st-pensado);}
+.notion-row.st-gravado{border-left-color:var(--st-gravado);}
+.notion-row.st-editado{border-left-color:var(--st-editado);}
+.notion-row.st-postado{border-left-color:var(--st-postado);}
+.notion-row:hover{border-color:var(--border2);transform:translateX(2px);}
 .notion-row.done .notion-txt{text-decoration:line-through;color:var(--text3);}
-.notion-row.sched .notion-txt{text-decoration:line-through;color:var(--text3);opacity:.75;}
+.notion-row.sched .notion-txt{opacity:.8;}
 .notion-txt[contenteditable="true"]{cursor:text;outline:none;border-radius:4px;padding:2px 4px;margin:-2px -4px;}
-.notion-txt[contenteditable="true"]:focus{background:var(--bg3);box-shadow:0 0 0 1px var(--gold);}
-.notion-drag{width:24px;padding:12px 2px 10px 10px;color:var(--text2);font-size:14px;opacity:.5;cursor:grab;flex-shrink:0;transition:opacity .12s,color .12s;}
+.notion-txt[contenteditable="true"]:focus{background:var(--bg4);box-shadow:0 0 0 1px var(--gold);}
+.notion-drag{width:20px;padding:12px 0 10px 8px;color:var(--text3);font-size:13px;opacity:.5;cursor:grab;flex-shrink:0;transition:opacity .12s,color .12s;}
 .notion-row:hover .notion-drag{opacity:1;color:var(--gold);}
 .notion-drag:active{cursor:grabbing;}
 .notion-check-col{padding:12px 6px 10px 2px;flex-shrink:0;}
 .notion-check{width:15px;height:15px;border-radius:3px;border:1.5px solid var(--border2);background:transparent;cursor:pointer;appearance:none;-webkit-appearance:none;position:relative;transition:all .15s;display:block;margin-top:1px;}
-.notion-check:checked{background:#16a34a;border-color:#16a34a;}
+.notion-check:checked{background:var(--st-postado);border-color:var(--st-postado);}
 .notion-check:checked::after{content:'';position:absolute;top:1px;left:4px;width:4px;height:7px;border:2px solid #fff;border-top:none;border-left:none;transform:rotate(45deg);}
 .notion-body{flex:1;min-width:0;padding:10px 8px 10px 0;cursor:pointer;}
 .notion-txt{font-size:13px;color:var(--text);line-height:1.55;font-weight:400;word-break:break-word;}
 .notion-txt:hover{color:var(--gold);}
-.notion-sub{display:flex;align-items:center;gap:6px;margin-top:5px;flex-wrap:wrap;}
+.notion-sub{display:flex;align-items:center;gap:6px;margin-top:6px;flex-wrap:wrap;}
 .notion-badge{font-size:10px;padding:2px 7px;border-radius:4px;border:1px solid var(--border);color:var(--text2);background:var(--bg4);font-weight:400;}
-.notion-st-row{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap;}
+.notion-st-row{display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;}
 .notion-st-btn{padding:2px 8px;border-radius:4px;border:1px solid var(--border2);background:transparent;color:var(--text3);font-size:10px;font-weight:500;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .12s;}
 .notion-st-btn:hover{border-color:var(--gold);color:var(--gold);}
-.notion-st-btn.active.pensado{background:rgba(90,90,114,.25);color:var(--text2);border-color:transparent;}
-.notion-st-btn.active.gravado{background:rgba(91,156,246,.15);color:#5b9cf6;border-color:transparent;}
-.notion-st-btn.active.editado{background:var(--goldbg);color:var(--gold2);border-color:transparent;}
-.notion-st-btn.active.postado{background:rgba(52,211,153,.15);color:#34d399;border-color:transparent;}
+.notion-st-btn.active.pensado{background:var(--st-pensado-bg);color:var(--st-pensado);border-color:transparent;}
+.notion-st-btn.active.gravado{background:var(--st-gravado-bg);color:var(--st-gravado);border-color:transparent;}
+.notion-st-btn.active.editado{background:var(--st-editado-bg);color:var(--st-editado);border-color:transparent;}
+.notion-st-btn.active.postado{background:var(--st-postado-bg);color:var(--st-postado);border-color:transparent;}
 .notion-acts{display:flex;gap:2px;flex-shrink:0;opacity:0;padding:10px 10px 10px 4px;padding-top:12px;transition:opacity .12s;}
 .notion-row:hover .notion-acts{opacity:1;}
 .notion-act{width:24px;height:24px;border-radius:5px;border:none;background:transparent;color:var(--text3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .12s;font-family:'Poppins',sans-serif;}
@@ -255,33 +275,30 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .section-divider::before,.section-divider::after{content:'';flex:1;height:1px;background:var(--border);}
 .section-divider-label{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.8px;white-space:nowrap;}
 .ideas-hint{padding:8px 14px;border-top:1px solid var(--border);font-size:10px;color:var(--text3);text-align:center;background:var(--bg3);}
-.ical-head{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid var(--border);background:var(--bg3);flex-shrink:0;}
+.ical-head{display:grid;grid-template-columns:repeat(7,1fr);border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg3);flex-shrink:0;}
 .ical-hcell{padding:8px 4px;text-align:center;font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;}
-.ical-body{display:grid;grid-template-columns:repeat(7,1fr);align-content:start;gap:6px;}
-.ical-cell{min-height:120px;overflow-y:auto;padding:6px;border-radius:10px;border:1px solid var(--border);background:var(--bg3);transition:background .12s,border-color .12s;}
-.ical-cell.empty-day{background:transparent;border:1px dashed var(--border);}
-.ical-cell:hover{border-color:var(--border2);}
-.ical-cell.drop-over{background:var(--goldbg2);border-color:var(--gold);box-shadow:0 0 0 2px rgba(232,25,44,.15) inset;}
-.ical-daynum{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--text2);margin-bottom:6px;display:inline-block;width:24px;height:24px;line-height:24px;text-align:center;}
+.ical-body{display:grid;grid-template-columns:repeat(7,1fr);align-content:start;gap:1px;background:var(--border);padding:1px;}
+.ical-cell{min-height:132px;overflow-y:auto;padding:7px;background:var(--bg2);transition:background .12s;}
+.ical-cell.empty-day{background:var(--bg);}
+.ical-cell:hover{background:var(--bg3);}
+.ical-cell.drop-over{background:var(--goldbg2);box-shadow:0 0 0 2px var(--gold) inset;}
+.ical-daynum{font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--text2);margin-bottom:6px;display:flex;align-items:center;justify-content:center;width:22px;height:22px;}
 .ical-cell.today .ical-daynum{background:var(--gold);color:#fff;border-radius:50%;}
-.ical-daynum{font-size:11px;color:var(--text2);width:20px;height:20px;display:flex;align-items:center;justify-content:center;margin-bottom:3px;}
-.ical-ev{font-size:11px;padding:6px 8px;border-radius:8px;margin-bottom:5px;display:flex;flex-direction:column;gap:4px;cursor:grab;border:1px solid rgba(255,255,255,0.08);box-shadow:0 2px 6px rgba(0,0,0,.3);}
+.ical-ev{font-size:11px;padding:6px 7px;border-radius:8px;margin-bottom:5px;display:flex;flex-direction:column;gap:4px;cursor:grab;border-left:3px solid var(--st-pensado);background:var(--bg3);box-shadow:0 2px 6px rgba(0,0,0,.3);}
 .ical-ev:active{cursor:grabbing;}
+.ical-ev.st-pensado{border-left-color:var(--st-pensado);}
+.ical-ev.st-gravado{border-left-color:var(--st-gravado);}
+.ical-ev.st-editado{border-left-color:var(--st-editado);background:var(--st-editado-bg);}
+.ical-ev.st-postado{border-left-color:var(--st-postado);}
 .ical-ev-top{display:flex;align-items:center;gap:3px;}
-.ical-ev-txt{overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;flex:1;font-weight:500;font-size:10px;line-height:1.3;word-break:break-word;white-space:normal;}
+.ical-ev-txt{overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;flex:1;font-weight:500;font-size:10px;line-height:1.3;word-break:break-word;white-space:normal;color:var(--text);}
 .ical-ev-rm{background:none;border:none;cursor:pointer;font-size:10px;color:inherit;opacity:0;padding:0;line-height:1;flex-shrink:0;}
 .ical-ev:hover .ical-ev-rm{opacity:.8;}
 .ical-ev-st{font-size:8px;font-weight:600;padding:1px 5px;border-radius:20px;cursor:pointer;letter-spacing:.3px;text-transform:uppercase;width:fit-content;transition:all .15s;border:none;font-family:'Poppins',sans-serif;}
-.ical-ev-st.pensado{background:rgba(255,255,255,.1);color:#888;}
-.ical-ev-st.gravado{background:rgba(255,255,255,.15);color:#bbb;}
-.ical-ev-st.editado{background:var(--goldbg);color:var(--gold);}
-.ical-ev-st.postado{background:rgba(62,207,142,.15);color:#3ecf8e;}
-.ical-ev{background:var(--bg3);color:var(--text2);}
-.ical-ev.ideia{background:rgba(232,25,44,.1);border-color:rgba(232,25,44,.2);}
-.ical-ev.gancho{background:rgba(232,25,44,.08);border-color:rgba(232,25,44,.15);}
-.ical-ev.tendencia{background:rgba(255,255,255,.04);}
-.ical-ev.abertura{background:rgba(255,255,255,.03);}
-.ical-ev.cta{background:var(--goldbg2);border-color:rgba(232,25,44,.15);}
+.ical-ev-st.pensado{background:var(--st-pensado-bg);color:var(--st-pensado);}
+.ical-ev-st.gravado{background:var(--st-gravado-bg);color:var(--st-gravado);}
+.ical-ev-st.editado{background:var(--st-editado-bg);color:var(--st-editado);}
+.ical-ev-st.postado{background:var(--st-postado-bg);color:var(--st-postado);}
 /* MOBILE TOPBAR */
 .topbar-mobile{display:none;position:fixed;top:0;left:0;right:0;height:54px;background:var(--bg2);border-bottom:1px solid var(--border);align-items:center;padding:0 16px;gap:12px;z-index:200;}
 .logo-mobile{display:flex;align-items:center;gap:8px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;}
@@ -378,9 +395,8 @@ window.addEventListener('load',checkAuth);
   <nav class="sb-nav">
     <div class="nav-section">Principal</div>
     <button class="nav-item active" data-pg="dashboard"><span class="nav-icon">▦</span>Dashboard</button>
-    <button class="nav-item" data-pg="calendario"><span class="nav-icon">▦</span>Calendário</button>
     <div class="nav-section">Criação</div>
-    <button class="nav-item" data-pg="ideias"><span class="nav-icon">◈</span>Banco de Ideias</button>
+    <button class="nav-item" data-pg="ideias"><span class="nav-icon">◈</span>Ideias &amp; Calendário</button>
     <button class="nav-item" data-pg="ia"><span class="nav-icon">◎</span>InstaClan AI<span class="ai-dot"></span></button>
   </nav>
   <div class="sb-user">
@@ -423,24 +439,11 @@ window.addEventListener('load',checkAuth);
   </div>
 </section>
 
-<!-- CALENDÁRIO -->
-<section class="page" id="page-calendario">
-  <div class="ph">
-    <div><div class="ph-eyebrow">Planejamento</div><div class="ph-title">Calendário</div><div class="ph-sub">Visualize suas publicações</div></div>
-    <div class="cal-nav">
-      <button class="btn-ghost" onclick="chMo(-1)">←</button>
-      <span class="cal-month-txt" id="cal-title"></span>
-      <button class="btn-ghost" onclick="chMo(1)">→</button>
-    </div>
-  </div>
-  <div class="cal-wrap" id="cal-wrap"></div>
-</section>
-
 <!-- IDEIAS -->
 <section class="page" id="page-ideias">
 
   <div class="ph">
-    <div><div class="ph-eyebrow">Planejamento</div><div class="ph-title">Ideias &amp; Calendário</div><div class="ph-sub">Arraste uma ideia do banco para um dia do calendário</div></div>
+    <div><div class="ph-eyebrow">Produção</div><div class="ph-title">Ideias &amp; Calendário</div><div class="ph-sub">Arraste um card do banco pra um dia — igual marcar uma cena na claquete</div></div>
     <button class="btn-gold" onclick="openModal('mi')">＋ Nova Ideia</button>
   </div>
 
@@ -448,41 +451,49 @@ window.addEventListener('load',checkAuth);
 
     <!-- BANCO DE IDEIAS (lado) -->
     <div class="ical-col">
-      <div class="ph" style="margin-bottom:14px">
-        <div class="ph-eyebrow" style="margin-bottom:0">Banco</div>
-        <div style="height:32px"></div>
-      </div>
-      <div class="notion-bank">
-      <div class="notion-bank-toolbar" style="flex-direction:column;align-items:stretch;gap:8px">
-        <input class="s-input" id="si-q" placeholder="Buscar ideias..." oninput="renderI()" style="width:100%"/>
-        <div class="i-filter-bar" id="i-filter-bar">
-          <button class="i-chip active" data-f="">Todas</button>
-          <button class="i-chip" data-f="ideia">Ideia</button>
-          <button class="i-chip" data-f="gancho">Gancho</button>
-          <button class="i-chip" data-f="tendencia">Tendência</button>
-          <button class="i-chip" data-f="abertura">Abertura</button>
-          <button class="i-chip" data-f="cta">CTA</button>
+      <div class="panel-card">
+        <div class="reel-rail"></div>
+        <div class="panel-hd">
+          <div class="panel-hd-title"><span class="panel-hd-icon">◈</span>Banco de Ideias</div>
+          <span class="panel-count" id="bank-count">0</span>
+        </div>
+        <div class="notion-bank-toolbar">
+          <input class="s-input" id="si-q" placeholder="Buscar ideias..." oninput="renderI()" style="width:100%"/>
+          <div class="i-filter-bar" id="i-filter-bar">
+            <button class="i-chip active" data-f="">Todas</button>
+            <button class="i-chip" data-f="ideia">💡 Ideia</button>
+            <button class="i-chip" data-f="gancho">🎯 Gancho</button>
+            <button class="i-chip" data-f="tendencia">📈 Tendência</button>
+            <button class="i-chip" data-f="abertura">🎬 Abertura</button>
+            <button class="i-chip" data-f="cta">📣 CTA</button>
+          </div>
+        </div>
+        <div id="igrid" class="notion-list"></div>
+        <div class="notion-quickadd-row">
+          <span class="notion-quickadd-icon">＋</span>
+          <div class="notion-quickadd-txt" id="quickadd-txt" contenteditable="true" data-placeholder="Escreva uma ideia e Enter..." onkeydown="if(event.key==='Enter'){event.preventDefault();quickAddIdea(this);}"></div>
         </div>
       </div>
-      <div id="igrid" class="notion-list"></div>
-      <div class="notion-quickadd-row">
-        <span class="notion-quickadd-icon">＋</span>
-        <div class="notion-quickadd-txt" id="quickadd-txt" contenteditable="true" data-placeholder="Escreva uma ideia e Enter..." onkeydown="if(event.key==='Enter'){event.preventDefault();quickAddIdea(this);}"></div>
-      </div>
-    </div>
     </div>
 
     <!-- CALENDÁRIO EDITORIAL -->
     <div class="ical-col">
-      <div class="ph" style="margin-bottom:14px">
-        <div class="ph-eyebrow" style="margin-bottom:0">Calendário</div>
-        <div style="display:flex;align-items:center;gap:8px">
-          <button class="btn-ghost" style="padding:6px 12px" onclick="chMi(-1)">←</button>
-          <span id="ical-title" style="font-family:'Bebas Neue',sans-serif;font-size:18px;min-width:140px;text-align:center;color:var(--text)"></span>
-          <button class="btn-ghost" style="padding:6px 12px" onclick="chMi(1)">→</button>
+      <div class="panel-card">
+        <div class="reel-rail"></div>
+        <div class="panel-hd">
+          <div class="panel-hd-title"><span class="panel-hd-icon">▦</span>Calendário Editorial</div>
+          <div class="cal-nav-mini">
+            <button class="cal-nav-btn" onclick="chMi(-1)">←</button>
+            <span id="ical-title" class="cal-nav-label"></span>
+            <button class="cal-nav-btn" onclick="chMi(1)">→</button>
+          </div>
         </div>
-      </div>
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:0 4px 28px rgba(0,0,0,.5);">
+        <div class="ical-legend">
+          <span><i class="dot" style="background:var(--st-pensado)"></i>Pensado</span>
+          <span><i class="dot" style="background:var(--st-gravado)"></i>Gravado</span>
+          <span><i class="dot" style="background:var(--st-editado)"></i>Editado</span>
+          <span><i class="dot" style="background:var(--st-postado)"></i>Postado</span>
+        </div>
         <div class="ical-head">
           <div class="ical-hcell">Dom</div><div class="ical-hcell">Seg</div><div class="ical-hcell">Ter</div>
           <div class="ical-hcell">Qua</div><div class="ical-hcell">Qui</div><div class="ical-hcell">Sex</div><div class="ical-hcell">Sáb</div>
@@ -602,7 +613,6 @@ function goPage(pg){
   document.querySelector(`[data-pg="${pg}"]`).classList.add('active');
   sidebar.classList.remove('open');overlay.classList.remove('active');
   if(pg==='dashboard')renderD();
-  if(pg==='calendario')renderCal();
   if(pg==='ideias'){renderI();renderIcal();}
 }
 
@@ -767,22 +777,7 @@ function renderC(){
   el.innerHTML=list.map(c=>`<div class="ccard" data-s="${c.st}" onclick="editC('${c.id}',event)"><div class="ccard-top"><div class="ccard-title">${esc(c.titulo)}</div><div class="ccard-acts"><button class="cact" onclick="editC('${c.id}',event)">✏</button><button class="cact del" onclick="delC('${c.id}',event)">✕</button></div></div><div class="ccard-meta"><span class="badge ${c.st}">${stLbl[c.st]}</span><span class="plat-pill">${plLbl[c.plat]||c.plat}</span>${c.cat?`<span class="plat-pill">${esc(c.cat)}</span>`:''}</div>${c.data?`<div class="ccard-date">📅 ${fmtD(c.data)}</div>`:''}${c.obs?`<div class="ccard-obs">${esc(c.obs)}</div>`:''}</div>`).join('');
 }
 
-function renderCal(){
-  const months=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-  document.getElementById('cal-title').textContent=`${months[calM]} ${calY}`;
-  const fd=new Date(calY,calM,1).getDay();const dim=new Date(calY,calM+1,0).getDate();const td=new Date();
-  const dias=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
-  let h=`<div class="cal-head">${dias.map(d=>`<div class="cal-hcell">${d}</div>`).join('')}</div><div class="cal-body">`;
-  for(let i=0;i<fd;i++)h+=`<div class="cal-cell" style="background:var(--bg)"></div>`;
-  for(let d=1;d<=dim;d++){
-    const isT=d===td.getDate()&&calM===td.getMonth()&&calY===td.getFullYear();
-    const ds=`${calY}-${String(calM+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const evs=conteudos.filter(c=>c.data===ds);
-    h+=`<div class="cal-cell${isT?' today':''}"><div class="cal-day">${d}</div>${evs.map(c=>`<div class="cal-ev ${c.st}">${esc(c.titulo)}</div>`).join('')}</div>`;
-  }
-  h+='</div>';document.getElementById('cal-wrap').innerHTML=h;
-}
-function chMo(d){calM+=d;if(calM>11){calM=0;calY++;}if(calM<0){calM=11;calY--;}renderCal();}
+
 
 // IDEAS CALENDAR STATE
 let icalM=new Date().getMonth(), icalY=new Date().getFullYear();
@@ -815,6 +810,7 @@ function renderI(){
   const q=(document.getElementById('si-q')?.value||'').toLowerCase();
   const list=ideias.filter(i=>(i.txt||'').toLowerCase().includes(q)&&(!iActiveFilter||i.tp===iActiveFilter));
   const el=document.getElementById('igrid');
+  const bc=document.getElementById('bank-count');if(bc)bc.textContent=ideias.length;
   if(!list.length){el.innerHTML='<div class="empty-notion">Nenhuma ideia encontrada. Crie uma com + Nova Ideia.</div>';return;}
   const platName={instagram:'Instagram',tiktok:'TikTok',youtube:'YT Shorts',facebook:'Facebook'};
   el.innerHTML=list.map(i=>{
@@ -827,7 +823,7 @@ function renderI(){
     if(i.hora)meta.push(`<span class="notion-badge">${i.hora}</span>`);
     if(sched)meta.push(`<span class="notion-badge" style="color:#3ecf8e;border-color:#3ecf8e">Agendada</span>`);
     (i.tags||[]).forEach(t=>meta.push(`<span class="notion-badge">#${esc(t)}</span>`));
-    return `<div class="notion-row${done?' done':''}${sched&&!done?' sched':''}" draggable="true" data-id="${i.id}">
+    return `<div class="notion-row st-${st}${done?' done':''}${sched&&!done?' sched':''}" draggable="true" data-id="${i.id}">
       <div class="notion-drag" title="Arrastar">⣿</div>
       <div class="notion-check-col">
         <input type="checkbox" class="notion-check" ${done?'checked':''} onchange="setIdeaSt(event,'${i.id}',this.checked?'postado':'pensado')"/>
@@ -875,7 +871,7 @@ function renderIcal(){
         const st=idea.st||'pensado';
         const platIcon={instagram:'📸',tiktok:'🎵',youtube:'▶️',facebook:'👤'}[idea.plat||'instagram'];
         const hora=idea.hora?`<span style="font-size:9px;color:var(--text3);margin-left:2px">⏰${idea.hora}</span>`:'';
-        return `<div class="ical-ev ${e.tp}" draggable="true" data-eid="${e.eid}" data-ds="${ds}" onclick="editIdea(event,'${e.id}')">
+        return `<div class="ical-ev st-${st}" draggable="true" data-eid="${e.eid}" data-ds="${ds}" onclick="editIdea(event,'${e.id}')">
           <div class="ical-ev-top">
             <span style="font-size:11px;margin-right:2px">${platIcon}</span>
             <span class="ical-ev-txt" style="color:var(--text)">${esc(e.txt)}</span>
@@ -1018,7 +1014,7 @@ async function analisarPerfil(){
   btn.disabled=false;
 }
 
-renderD();renderCal();renderI();renderIcal();checkAlerts();
+renderD();renderI();renderIcal();checkAlerts();
 function checkAlerts(){
   const amanha=new Date();amanha.setDate(amanha.getDate()+1);
   const ds=`${amanha.getFullYear()}-${String(amanha.getMonth()+1).padStart(2,'0')}-${String(amanha.getDate()).padStart(2,'0')}`;
